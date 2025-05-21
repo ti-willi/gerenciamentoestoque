@@ -1,6 +1,6 @@
-package com.tiwilli.gerenciamentoestoque.dtos;
+package com.tiwilli.gerenciamentoestoque.dto.inventory;
 
-import com.tiwilli.gerenciamentoestoque.entities.Category;
+import com.tiwilli.gerenciamentoestoque.entities.inventory.Category;
 
 public class CategoryDTO {
 

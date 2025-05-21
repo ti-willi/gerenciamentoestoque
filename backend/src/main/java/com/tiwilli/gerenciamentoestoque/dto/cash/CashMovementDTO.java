@@ -1,14 +1,14 @@
-package com.tiwilli.gerenciamentoestoque.dtos;
+package com.tiwilli.gerenciamentoestoque.dto.cash;
 
-import com.tiwilli.gerenciamentoestoque.entities.CashMovement;
+import com.tiwilli.gerenciamentoestoque.entities.cash.CashMovement;
 import com.tiwilli.gerenciamentoestoque.entities.enums.MovementType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class CashMovementDTO {
 
     private Long id;
-    private LocalDateTime localDateTime;
+    private Instant moment;
     private Double amount;
     private String description;
     private MovementType type;
@@ -17,9 +17,9 @@ public class CashMovementDTO {
     public CashMovementDTO() {
     }
 
-    public CashMovementDTO(Long id, LocalDateTime localDateTime, Double amount, String description, MovementType type, Long cashClosingId) {
+    public CashMovementDTO(Long id, Instant moment, Double amount, String description, MovementType type, Long cashClosingId) {
         this.id = id;
-        this.localDateTime = localDateTime;
+        this.moment = moment;
         this.amount = amount;
         this.description = description;
         this.type = type;
@@ -28,7 +28,7 @@ public class CashMovementDTO {
 
     public CashMovementDTO(CashMovement entity) {
         id = entity.getId();
-        localDateTime = entity.getLocalDateTime();
+        moment = entity.getMoment();
         amount = entity.getAmount();
         description = entity.getDescription();
         type = entity.getType();
@@ -43,12 +43,12 @@ public class CashMovementDTO {
         this.id = id;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public Instant getMoment() {
+        return moment;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setMoment(Instant moment) {
+        this.moment = moment;
     }
 
     public Double getAmount() {

@@ -1,34 +1,24 @@
-package com.tiwilli.gerenciamentoestoque.entities;
+package com.tiwilli.gerenciamentoestoque.dto.inventory;
 
+import com.tiwilli.gerenciamentoestoque.entities.inventory.Product;
 import com.tiwilli.gerenciamentoestoque.entities.enums.Gender;
-import jakarta.persistence.*;
 
-import java.util.Objects;
 
-@Entity
-@Table(name = "tb_product")
-public class Product {
+public class ProductDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long productCode;
     private String name;
     private String description;
     private Gender gender;
-
-    @Column(name = "product_value")
     private Double value;
     private Integer quantity;
+    private Long categoryId;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    public Product() {
+    public ProductDTO() {
     }
 
-    public Product(Long id, Long productCode, String name, String description, Gender gender, Double value, Integer quantity, Category category) {
+    public ProductDTO(Long id, Long productCode, String name, String description, Gender gender, Double value, Integer quantity, Long categoryId) {
         this.id = id;
         this.productCode = productCode;
         this.name = name;
@@ -36,7 +26,18 @@ public class Product {
         this.gender = gender;
         this.value = value;
         this.quantity = quantity;
-        this.category = category;
+        this.categoryId = categoryId;
+    }
+
+    public ProductDTO(Product entity) {
+        id = entity.getId();
+        productCode = entity.getProductCode();
+        name = entity.getName();
+        description = entity.getDescription();
+        gender = entity.getGender();
+        value = entity.getValue();
+        quantity = entity.getQuantity();
+        categoryId = entity.getCategory().getId();
     }
 
     public Long getId() {
@@ -95,26 +96,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Product product = (Product) o;
-
-        return Objects.equals(id, product.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

@@ -1,8 +1,8 @@
-package com.tiwilli.gerenciamentoestoque.entities;
+package com.tiwilli.gerenciamentoestoque.entities.cash;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,9 +14,10 @@ public class CashClosing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
-    private Double initialCash;
-    private String finalBalance;
+    private Instant openingTime;
+    private Instant closingTime;
+    private Double initialBalance;
+    private Double finalBalance;
 
     @OneToMany(mappedBy = "cashClosing")
     private List<CashMovement> movements = new ArrayList<>();
@@ -24,10 +25,11 @@ public class CashClosing {
     public CashClosing() {
     }
 
-    public CashClosing(Long id, LocalDate date, Double initialCash, String finalBalance) {
+    public CashClosing(Long id, Instant openingTime, Instant closingTime, Double initialBalance, Double finalBalance) {
         this.id = id;
-        this.date = date;
-        this.initialCash = initialCash;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.initialBalance = initialBalance;
         this.finalBalance = finalBalance;
     }
 
@@ -39,27 +41,35 @@ public class CashClosing {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Instant getOpeningTime() {
+        return openingTime;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setOpeningTime(Instant openingTime) {
+        this.openingTime = openingTime;
     }
 
-    public Double getInitialCash() {
-        return initialCash;
+    public Instant getClosingTime() {
+        return closingTime;
     }
 
-    public void setInitialCash(Double initialCash) {
-        this.initialCash = initialCash;
+    public void setClosingTime(Instant closingTime) {
+        this.closingTime = closingTime;
     }
 
-    public String getFinalBalance() {
+    public Double getInitialBalance() {
+        return initialBalance;
+    }
+
+    public void setInitialBalance(Double initialBalance) {
+        this.initialBalance = initialBalance;
+    }
+
+    public Double getFinalBalance() {
         return finalBalance;
     }
 
-    public void setFinalBalance(String finalBalance) {
+    public void setFinalBalance(Double finalBalance) {
         this.finalBalance = finalBalance;
     }
 

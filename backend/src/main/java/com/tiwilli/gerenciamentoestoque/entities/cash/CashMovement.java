@@ -1,9 +1,9 @@
-package com.tiwilli.gerenciamentoestoque.entities;
+package com.tiwilli.gerenciamentoestoque.entities.cash;
 
 import com.tiwilli.gerenciamentoestoque.entities.enums.MovementType;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -13,7 +13,7 @@ public class CashMovement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime localDateTime;
+    private Instant moment;
     private Double amount;
     private String description;
     private MovementType type;
@@ -25,9 +25,9 @@ public class CashMovement {
     public CashMovement() {
     }
 
-    public CashMovement(Long id, LocalDateTime localDateTime, Double amount, String description, MovementType type, CashClosing cashClosing) {
+    public CashMovement(Long id, Instant moment, Double amount, String description, MovementType type, CashClosing cashClosing) {
         this.id = id;
-        this.localDateTime = localDateTime;
+        this.moment = moment;
         this.amount = amount;
         this.description = description;
         this.type = type;
@@ -42,12 +42,12 @@ public class CashMovement {
         this.id = id;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public Instant getMoment() {
+        return moment;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setMoment(Instant moment) {
+        this.moment = moment;
     }
 
     public Double getAmount() {

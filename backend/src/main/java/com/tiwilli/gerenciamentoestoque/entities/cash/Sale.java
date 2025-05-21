@@ -1,9 +1,10 @@
-package com.tiwilli.gerenciamentoestoque.entities;
+package com.tiwilli.gerenciamentoestoque.entities.cash;
 
+import com.tiwilli.gerenciamentoestoque.entities.inventory.Product;
 import com.tiwilli.gerenciamentoestoque.entities.enums.PaymentType;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,19 +16,19 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime saleDate;
+    private Instant moment;
     private Double total;
     private PaymentType paymentType;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.sale")
     private List<SaleItem> items = new ArrayList<>();
 
     public Sale() {
     }
 
-    public Sale(Long id, LocalDateTime saleDate, Double total, PaymentType paymentType) {
+    public Sale(Long id, Instant moment, Double total, PaymentType paymentType) {
         this.id = id;
-        this.saleDate = saleDate;
+        this.moment = moment;
         this.total = total;
         this.paymentType = paymentType;
     }
@@ -40,12 +41,12 @@ public class Sale {
         this.id = id;
     }
 
-    public LocalDateTime getSaleDate() {
-        return saleDate;
+    public Instant getmoment() {
+        return moment;
     }
 
-    public void setSaleDate(LocalDateTime saleDate) {
-        this.saleDate = saleDate;
+    public void setmoment(Instant moment) {
+        this.moment = moment;
     }
 
     public Double getTotal() {
@@ -66,6 +67,10 @@ public class Sale {
 
     public List<SaleItem> getItems() {
         return items;
+    }
+
+    public List<Product> getProducts() {
+        return items.stream().map(SaleItem::getProduct).toList();
     }
 
     @Override

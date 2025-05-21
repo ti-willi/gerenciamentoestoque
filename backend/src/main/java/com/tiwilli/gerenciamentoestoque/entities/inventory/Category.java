@@ -1,4 +1,4 @@
-package com.tiwilli.gerenciamentoestoque.entities;
+package com.tiwilli.gerenciamentoestoque.entities.inventory;
 
 import jakarta.persistence.*;
 

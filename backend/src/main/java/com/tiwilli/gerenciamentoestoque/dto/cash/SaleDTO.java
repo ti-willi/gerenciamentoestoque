@@ -1,17 +1,17 @@
-package com.tiwilli.gerenciamentoestoque.dtos;
+package com.tiwilli.gerenciamentoestoque.dto.cash;
 
-import com.tiwilli.gerenciamentoestoque.entities.Sale;
-import com.tiwilli.gerenciamentoestoque.entities.SaleItem;
+import com.tiwilli.gerenciamentoestoque.entities.cash.Sale;
+import com.tiwilli.gerenciamentoestoque.entities.cash.SaleItem;
 import com.tiwilli.gerenciamentoestoque.entities.enums.PaymentType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SaleDTO {
 
     private Long id;
-    private LocalDateTime saleDate;
+    private Instant moment;
     private Double total;
     private PaymentType paymentType;
     private List<SaleItemDTO> items = new ArrayList<>();
@@ -19,16 +19,16 @@ public class SaleDTO {
     public SaleDTO() {
     }
 
-    public SaleDTO(Long id, LocalDateTime saleDate, Double total, PaymentType paymentType) {
+    public SaleDTO(Long id, Instant moment, Double total, PaymentType paymentType) {
         this.id = id;
-        this.saleDate = saleDate;
+        this.moment = moment;
         this.total = total;
         this.paymentType = paymentType;
     }
 
     public SaleDTO(Sale entity) {
         id = entity.getId();
-        saleDate = entity.getSaleDate();
+        moment = entity.getmoment();
         total = entity.getTotal();
         for (SaleItem item : entity.getItems()) {
             SaleItemDTO itemDTO = new SaleItemDTO(item);
@@ -44,12 +44,12 @@ public class SaleDTO {
         this.id = id;
     }
 
-    public LocalDateTime getSaleDate() {
-        return saleDate;
+    public Instant getmoment() {
+        return moment;
     }
 
-    public void setSaleDate(LocalDateTime saleDate) {
-        this.saleDate = saleDate;
+    public void setmoment(Instant moment) {
+        this.moment = moment;
     }
 
     public Double getTotal() {

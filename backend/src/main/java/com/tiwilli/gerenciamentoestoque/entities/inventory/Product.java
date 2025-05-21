@@ -1,24 +1,41 @@
-package com.tiwilli.gerenciamentoestoque.dtos;
+package com.tiwilli.gerenciamentoestoque.entities.inventory;
 
-import com.tiwilli.gerenciamentoestoque.entities.Product;
+import com.tiwilli.gerenciamentoestoque.entities.cash.Sale;
+import com.tiwilli.gerenciamentoestoque.entities.cash.SaleItem;
 import com.tiwilli.gerenciamentoestoque.entities.enums.Gender;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class ProductDTO {
+@Entity
+@Table(name = "tb_product")
+public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long productCode;
     private String name;
     private String description;
     private Gender gender;
+
+    @Column(name = "product_value")
     private Double value;
     private Integer quantity;
-    private Long categoryId;
 
-    public ProductDTO() {
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "id.product")
+    private List<SaleItem> items = new ArrayList<>();
+
+    public Product() {
     }
 
-    public ProductDTO(Long id, Long productCode, String name, String description, Gender gender, Double value, Integer quantity, Long categoryId) {
+    public Product(Long id, Long productCode, String name, String description, Gender gender, Double value, Integer quantity, Category category) {
         this.id = id;
         this.productCode = productCode;
         this.name = name;
@@ -26,18 +43,7 @@ public class ProductDTO {
         this.gender = gender;
         this.value = value;
         this.quantity = quantity;
-        this.categoryId = categoryId;
-    }
-
-    public ProductDTO(Product entity) {
-        id = entity.getId();
-        productCode = entity.getProductCode();
-        name = entity.getName();
-        description = entity.getDescription();
-        gender = entity.getGender();
-        value = entity.getValue();
-        quantity = entity.getQuantity();
-        categoryId = entity.getCategory().getId();
+        this.category = category;
     }
 
     public Long getId() {
@@ -96,11 +102,34 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<SaleItem> getItems() {
+        return items;
+    }
+
+    public List<Sale> getSales() {
+        return items.stream().map(SaleItem::getSale).toList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
