@@ -1,36 +1,42 @@
-package com.tiwilli.gerenciamentoestoque.entities.cash;
+package com.tiwilli.gerenciamentoestoque.dto.cash;
 
-import jakarta.persistence.*;
+import com.tiwilli.gerenciamentoestoque.entities.cash.CashSession;
+import com.tiwilli.gerenciamentoestoque.entities.cash.CashMovement;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@Entity
-@Table(name = "tb_cash_closing")
-public class CashClosing {
+public class CashSessionDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Instant openingTime;
     private Instant closingTime;
     private Double initialBalance;
     private Double finalBalance;
+    private List<CashMovementDTO> movements = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cashClosing")
-    private List<CashMovement> movements = new ArrayList<>();
-
-    public CashClosing() {
+    public CashSessionDTO() {
     }
 
-    public CashClosing(Long id, Instant openingTime, Instant closingTime, Double initialBalance, Double finalBalance) {
+    public CashSessionDTO(Long id, Instant openingTime, Instant closingTime, Double initialBalance, Double finalBalance) {
         this.id = id;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.initialBalance = initialBalance;
         this.finalBalance = finalBalance;
+    }
+
+    public CashSessionDTO(CashSession entity) {
+        id = entity.getId();
+        openingTime = entity.getOpeningTime();
+        closingTime = entity.getClosingTime();
+        initialBalance = entity.getInitialBalance();
+        finalBalance = entity.getFinalBalance();
+        for (CashMovement movement : entity.getMovements()) {
+            CashMovementDTO movementDTO = new CashMovementDTO(movement);
+            movements.add(movementDTO);
+        }
     }
 
     public Long getId() {
@@ -73,22 +79,7 @@ public class CashClosing {
         this.finalBalance = finalBalance;
     }
 
-    public List<CashMovement> getMovements() {
+    public List<CashMovementDTO> getMovements() {
         return movements;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CashClosing that = (CashClosing) o;
-
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
     }
 }

@@ -1,10 +1,11 @@
 package com.tiwilli.gerenciamentoestoque.services.cash;
 
 import com.tiwilli.gerenciamentoestoque.dto.cash.CashMovementDTO;
-import com.tiwilli.gerenciamentoestoque.entities.cash.CashClosing;
+import com.tiwilli.gerenciamentoestoque.entities.cash.CashSession;
 import com.tiwilli.gerenciamentoestoque.entities.cash.CashMovement;
-import com.tiwilli.gerenciamentoestoque.repositories.cash.CashClosingRepository;
+import com.tiwilli.gerenciamentoestoque.repositories.cash.CashSessionRepository;
 import com.tiwilli.gerenciamentoestoque.repositories.cash.CashMovementRepository;
+import com.tiwilli.gerenciamentoestoque.services.exceptions.BusinessException;
 import com.tiwilli.gerenciamentoestoque.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public class CashMovementService {
     private CashMovementRepository repository;
 
     @Autowired
-    private CashClosingRepository cashClosingRepository;
+    private CashSessionRepository cashSessionRepository;
 
     @Transactional(readOnly = true)
     public CashMovementDTO findById(Long id) {
@@ -30,7 +31,7 @@ public class CashMovementService {
         return new CashMovementDTO(cashMovement);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<CashMovementDTO> findAll(Pageable pageable) {
         Page<CashMovement> result = repository.findAll(pageable);
         return result.map(CashMovementDTO::new);
@@ -38,22 +39,21 @@ public class CashMovementService {
 
     @Transactional
     public CashMovementDTO insert(CashMovementDTO dto) {
+        CashSession openCash = cashSessionRepository.findByClosingTimeIsNull().orElseThrow(
+                () -> new BusinessException("There is no open cash"));
+
         CashMovement entity = new CashMovement();
-        copyDtoToEntity(dto, entity);
+        copyDtoToEntity(dto, entity, openCash);
         entity = repository.save(entity);
         return new CashMovementDTO(entity);
     }
 
     @Transactional
-    private void copyDtoToEntity(CashMovementDTO dto, CashMovement entity) {
+    private void copyDtoToEntity(CashMovementDTO dto, CashMovement entity, CashSession cashClosing) {
         entity.setAmount(dto.getAmount());
         entity.setDescription(dto.getDescription());
         entity.setType(dto.getType());
         entity.setMoment(Instant.now());
-
-        if (dto.getCashClosingId() != null) {
-            CashClosing cashClosing = cashClosingRepository.getReferenceById(dto.getId());
-            entity.setCashClosing(cashClosing);
-        }
+        entity.setCashClosing(cashClosing);
     }
 }
