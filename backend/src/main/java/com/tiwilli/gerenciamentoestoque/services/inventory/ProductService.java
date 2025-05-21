@@ -77,8 +77,9 @@ public class ProductService {
         entity.setProductCode(dto.getProductCode());
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
+        entity.setImgUrl(dto.getImgUrl());
         entity.setGender(dto.getGender());
-        entity.setValue(dto.getValue());
+        entity.setPrice(dto.getPrice());
         entity.setQuantity(dto.getQuantity());
 
         Category category = categoryRepository.getReferenceById(dto.getCategoryId());

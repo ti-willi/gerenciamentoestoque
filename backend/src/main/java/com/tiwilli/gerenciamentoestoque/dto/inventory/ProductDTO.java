@@ -10,21 +10,23 @@ public class ProductDTO {
     private Long productCode;
     private String name;
     private String description;
+    private String imgUrl;
     private Gender gender;
-    private Double value;
+    private Double price;
     private Integer quantity;
     private Long categoryId;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, Long productCode, String name, String description, Gender gender, Double value, Integer quantity, Long categoryId) {
+    public ProductDTO(Long id, Long productCode, String name, String description, String imgUrl, Gender gender, Double price, Integer quantity, Long categoryId) {
         this.id = id;
         this.productCode = productCode;
         this.name = name;
         this.description = description;
+        this.imgUrl = imgUrl;
         this.gender = gender;
-        this.value = value;
+        this.price = price;
         this.quantity = quantity;
         this.categoryId = categoryId;
     }
@@ -34,8 +36,9 @@ public class ProductDTO {
         productCode = entity.getProductCode();
         name = entity.getName();
         description = entity.getDescription();
+        imgUrl = entity.getImgUrl();
         gender = entity.getGender();
-        value = entity.getValue();
+        price = entity.getPrice();
         quantity = entity.getQuantity();
         categoryId = entity.getCategory().getId();
     }
@@ -72,6 +75,14 @@ public class ProductDTO {
         this.description = description;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public Gender getGender() {
         return gender;
     }
@@ -80,12 +91,12 @@ public class ProductDTO {
         this.gender = gender;
     }
 
-    public Double getValue() {
-        return value;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public Integer getQuantity() {

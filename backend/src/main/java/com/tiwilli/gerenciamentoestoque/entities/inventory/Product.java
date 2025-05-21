@@ -19,10 +19,9 @@ public class Product {
     private Long productCode;
     private String name;
     private String description;
+    private String imgUrl;
     private Gender gender;
-
-    @Column(name = "product_value")
-    private Double value;
+    private Double price;
     private Integer quantity;
 
     @ManyToOne
@@ -35,13 +34,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, Long productCode, String name, String description, Gender gender, Double value, Integer quantity, Category category) {
+    public Product(Long id, Long productCode, String name, String description, String imgUrl, Gender gender, Double price, Integer quantity, Category category) {
         this.id = id;
         this.productCode = productCode;
         this.name = name;
         this.description = description;
+        this.imgUrl = imgUrl;
         this.gender = gender;
-        this.value = value;
+        this.price = price;
         this.quantity = quantity;
         this.category = category;
     }
@@ -78,6 +78,14 @@ public class Product {
         this.description = description;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public Gender getGender() {
         return gender;
     }
@@ -86,12 +94,12 @@ public class Product {
         this.gender = gender;
     }
 
-    public Double getValue() {
-        return value;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public Integer getQuantity() {

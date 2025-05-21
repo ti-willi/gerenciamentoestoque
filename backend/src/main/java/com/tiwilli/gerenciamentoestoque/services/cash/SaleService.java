@@ -58,10 +58,10 @@ public class SaleService {
             product.setQuantity(product.getQuantity() - itemDTO.getQuantity());
             productRepository.save(product);
 
-            SaleItem item = new SaleItem(sale, product, itemDTO.getQuantity(), product.getValue());
+            SaleItem item = new SaleItem(sale, product, itemDTO.getQuantity(), product.getPrice());
             sale.getItems().add(item);
 
-            total += item.getQuantity() * product.getValue();
+            total += item.getQuantity() * product.getPrice();
         }
 
         sale.setTotal(total);
