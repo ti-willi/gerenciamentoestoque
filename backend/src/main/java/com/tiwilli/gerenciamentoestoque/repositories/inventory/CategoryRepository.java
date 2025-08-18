@@ -10,7 +10,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("""
             SELECT obj FROM Category obj
-            WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%'))
+            WHERE UPPER(obj.name) LIKE UPPER(CONCAT(:name, '%'))
             """)
 
     Page<Category> searchByName(String name, Pageable pageable);

@@ -1,8 +1,6 @@
 package com.tiwilli.gerenciamentoestoque.controllers.inventory;
 
-import com.tiwilli.gerenciamentoestoque.dto.inventory.CategoryDTO;
 import com.tiwilli.gerenciamentoestoque.dto.inventory.ProductDTO;
-import com.tiwilli.gerenciamentoestoque.services.inventory.CategoryService;
 import com.tiwilli.gerenciamentoestoque.services.inventory.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
