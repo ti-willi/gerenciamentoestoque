@@ -28,8 +28,8 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoryDTO> findAll(Pageable pageable) {
-        Page<Category> result = repository.findAll(pageable);
+    public Page<CategoryDTO> findAll(String name, Pageable pageable) {
+        Page<Category> result = repository.searchByName(name, pageable);
         return result.map(CategoryDTO::new);
     }
 

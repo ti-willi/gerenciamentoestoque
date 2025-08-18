@@ -9,9 +9,11 @@ import com.tiwilli.gerenciamentoestoque.repositories.inventory.ProductRepository
 import com.tiwilli.gerenciamentoestoque.repositories.cash.SaleItemRepository;
 import com.tiwilli.gerenciamentoestoque.repositories.cash.SaleRepository;
 import com.tiwilli.gerenciamentoestoque.services.exceptions.ResourceNotFoundException;
+import com.tiwilli.gerenciamentoestoque.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +39,27 @@ public class SaleService {
     }
 
     @Transactional(readOnly = true)
-    public Page<SaleDTO> findAll(Pageable pageable) {
-        Page<Sale> result = repository.findAll(pageable);
+    public Page<SaleDTO> findAll(Instant startMoment, Instant endMoment, String period, Pageable pageable) {
+        Instant start;
+        Instant end;
+
+        if (startMoment != null && endMoment != null) {
+            start = startMoment;
+            end = endMoment;
+        }
+        else if (period != null && !period.isEmpty()) {
+            Pair<Instant, Instant> range = Utils.dateRange(period, Instant.now());
+            if (range == null) {
+                throw new IllegalArgumentException("Invalid period");
+            }
+            start = range.getFirst();
+            end = range.getSecond();
+        }
+        else {
+            throw  new IllegalArgumentException("You should enter either period or the date range");
+        }
+
+        Page<Sale> result = repository.searchByDateBetween(start, end, pageable);
         return result.map(SaleDTO::new);
     }
 
