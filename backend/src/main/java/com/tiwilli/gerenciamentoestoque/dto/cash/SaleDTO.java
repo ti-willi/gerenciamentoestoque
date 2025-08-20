@@ -28,7 +28,7 @@ public class SaleDTO {
 
     public SaleDTO(Sale entity) {
         id = entity.getId();
-        moment = entity.getmoment();
+        moment = entity.getMoment();
         total = entity.getTotal();
         for (SaleItem item : entity.getItems()) {
             SaleItemDTO itemDTO = new SaleItemDTO(item);

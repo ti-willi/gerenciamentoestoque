@@ -41,7 +41,7 @@ public class Sale {
         this.id = id;
     }
 
-    public Instant getmoment() {
+    public Instant getMoment() {
         return moment;
     }
 

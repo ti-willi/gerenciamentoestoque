@@ -1,6 +1,7 @@
 package com.tiwilli.gerenciamentoestoque.controllers.cash;
 
 import com.tiwilli.gerenciamentoestoque.dto.cash.SaleDTO;
+import com.tiwilli.gerenciamentoestoque.dto.cash.SalesReportDTO;
 import com.tiwilli.gerenciamentoestoque.services.cash.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,12 +22,12 @@ public class SaleController {
 
     @GetMapping
     public ResponseEntity<Page<SaleDTO>> findAll(
-            @RequestParam(required = false, defaultValue = "") Instant startMoment,
-            @RequestParam(required = false, defaultValue = "") Instant endMoment,
+            @RequestParam(required = false, defaultValue = "") Instant minDate,
+            @RequestParam(required = false, defaultValue = "") Instant maxDate,
             @RequestParam(required = false, defaultValue = "") String period,
             Pageable pageable
     ) {
-        Page<SaleDTO> result = service.findAll(startMoment, endMoment, period, pageable);
+        Page<SaleDTO> result = service.findAll(minDate, maxDate, period, pageable);
         return ResponseEntity.ok(result);
     }
 
@@ -38,9 +39,18 @@ public class SaleController {
 
     @PostMapping
     public ResponseEntity<SaleDTO> insert(@RequestBody SaleDTO dto) {
-        SaleDTO newSale = service.insert(dto);
+        dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
         return  ResponseEntity.created(uri).body(dto);
+    }
+
+    @GetMapping("/report")
+    public SalesReportDTO getSalesReport(
+            @RequestParam Instant minDate,
+            @RequestParam Instant maxDate,
+            Pageable pageable
+    ) {
+        return service.generateReport(minDate, maxDate, pageable);
     }
 }

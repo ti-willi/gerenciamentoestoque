@@ -2,6 +2,8 @@ package com.tiwilli.gerenciamentoestoque.services.cash;
 
 import com.tiwilli.gerenciamentoestoque.dto.cash.SaleDTO;
 import com.tiwilli.gerenciamentoestoque.dto.cash.SaleItemDTO;
+import com.tiwilli.gerenciamentoestoque.dto.cash.SaleReportDTO;
+import com.tiwilli.gerenciamentoestoque.dto.cash.SalesReportDTO;
 import com.tiwilli.gerenciamentoestoque.entities.cash.CashMovement;
 import com.tiwilli.gerenciamentoestoque.entities.cash.CashSession;
 import com.tiwilli.gerenciamentoestoque.entities.cash.Sale;
@@ -17,12 +19,14 @@ import com.tiwilli.gerenciamentoestoque.services.exceptions.ResourceNotFoundExce
 import com.tiwilli.gerenciamentoestoque.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class SaleService {
@@ -91,9 +95,13 @@ public class SaleService {
         double total = 0.0;
         for (SaleItemDTO itemDTO : dto.getItems()) {
             Product product = getProductAndUpdateStock(itemDTO);
-            SaleItem item = new SaleItem(sale, product, itemDTO.getQuantity(), product.getPrice());
+
+            double unitPrice = product.getPrice();
+            double subTotal = unitPrice * itemDTO.getQuantity();
+            SaleItem item = new SaleItem(sale, product, itemDTO.getName(), itemDTO.getQuantity(), unitPrice, subTotal);
+
             sale.getItems().add(item);
-            total += item.getQuantity() * product.getPrice();
+            total += subTotal;
         }
 
         sale.setTotal(total);
@@ -123,4 +131,38 @@ public class SaleService {
 
         cashMovementRepository.save(movement);
     }
+
+    @Transactional(readOnly = true)
+    public SalesReportDTO generateReport(Instant minDate, Instant maxDate, Pageable pageable) {
+        Page<Sale> salesPage = saleRepository.searchByDateBetween(minDate, maxDate, pageable);
+
+        List<SaleReportDTO> saleReports = salesPage.stream()
+                .map(sale -> new SaleReportDTO(
+                        sale.getId(),
+                        sale.getMoment(),
+                        sale.getTotal(),
+                        sale.getItems().stream()
+                                .map(item -> new SaleItemDTO(
+                                        item.getProduct().getId(),
+                                        item.getProduct().getName(),
+                                        item.getQuantity(),
+                                        item.getUnitPrice(),
+                                        item.getSubTotal()
+                                ))
+                                .toList()
+                ))
+                .toList();
+
+        Integer totalQuantity = saleReports.stream()
+                .flatMap(r -> r.items().stream())
+                .mapToInt(SaleItemDTO::getQuantity)
+                .sum();
+
+        Double totalAmount = saleReports.stream()
+                .mapToDouble(SaleReportDTO::totalAmount)
+                .sum();
+
+        return new SalesReportDTO(totalQuantity, totalAmount, new PageImpl<>(saleReports, pageable, salesPage.getTotalElements()));
+    }
+
 }
