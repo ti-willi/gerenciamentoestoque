@@ -49,11 +49,11 @@ public class CashMovementService {
     }
 
     @Transactional
-    private void copyDtoToEntity(CashMovementDTO dto, CashMovement entity, CashSession cashClosing) {
+    private void copyDtoToEntity(CashMovementDTO dto, CashMovement entity, CashSession cashSession) {
         entity.setAmount(dto.getAmount());
         entity.setDescription(dto.getDescription());
         entity.setType(dto.getType());
         entity.setMoment(Instant.now());
-        entity.setCashClosing(cashClosing);
+        entity.setCashSession(cashSession);
     }
 }

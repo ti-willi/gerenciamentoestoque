@@ -34,6 +34,7 @@ public class SaleDTO {
             SaleItemDTO itemDTO = new SaleItemDTO(item);
             items.add(itemDTO);
         }
+        paymentType = entity.getPaymentType();
     }
 
     public Long getId() {

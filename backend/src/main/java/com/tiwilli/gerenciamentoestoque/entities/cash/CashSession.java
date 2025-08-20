@@ -19,7 +19,7 @@ public class CashSession {
     private Double initialBalance;
     private Double finalBalance;
 
-    @OneToMany(mappedBy = "cashClosing")
+    @OneToMany(mappedBy = "cashSession")
     private List<CashMovement> movements = new ArrayList<>();
 
     public CashSession() {

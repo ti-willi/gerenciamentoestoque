@@ -45,7 +45,7 @@ public class Sale {
         return moment;
     }
 
-    public void setmoment(Instant moment) {
+    public void setMoment(Instant moment) {
         this.moment = moment;
     }
 

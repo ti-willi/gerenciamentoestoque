@@ -19,19 +19,19 @@ public class CashMovement {
     private MovementType type;
 
     @ManyToOne
-    @JoinColumn(name = "cash_closing_id")
-    private CashSession cashClosing;
+    @JoinColumn(name = "cash_session_id")
+    private CashSession cashSession;
 
     public CashMovement() {
     }
 
-    public CashMovement(Long id, Instant moment, Double amount, String description, MovementType type, CashSession cashClosing) {
+    public CashMovement(Long id, Instant moment, Double amount, String description, MovementType type, CashSession cashSession) {
         this.id = id;
         this.moment = moment;
         this.amount = amount;
         this.description = description;
         this.type = type;
-        this.cashClosing = cashClosing;
+        this.cashSession = cashSession;
     }
 
     public Long getId() {
@@ -74,12 +74,12 @@ public class CashMovement {
         this.type = type;
     }
 
-    public CashSession getCashClosing() {
-        return cashClosing;
+    public CashSession getCashSession() {
+        return cashSession;
     }
 
-    public void setCashClosing(CashSession cashClosing) {
-        this.cashClosing = cashClosing;
+    public void setCashSession(CashSession cashSession) {
+        this.cashSession = cashSession;
     }
 
     @Override

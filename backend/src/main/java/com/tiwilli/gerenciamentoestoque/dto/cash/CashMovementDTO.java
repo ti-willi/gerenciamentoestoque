@@ -12,18 +12,18 @@ public class CashMovementDTO {
     private Double amount;
     private String description;
     private MovementType type;
-    private Long cashClosingId;
+    private Long cashSessionId;
 
     public CashMovementDTO() {
     }
 
-    public CashMovementDTO(Long id, Instant moment, Double amount, String description, MovementType type, Long cashClosingId) {
+    public CashMovementDTO(Long id, Instant moment, Double amount, String description, MovementType type, Long cashSessionId) {
         this.id = id;
         this.moment = moment;
         this.amount = amount;
         this.description = description;
         this.type = type;
-        this.cashClosingId = cashClosingId;
+        this.cashSessionId = cashSessionId;
     }
 
     public CashMovementDTO(CashMovement entity) {
@@ -32,7 +32,7 @@ public class CashMovementDTO {
         amount = entity.getAmount();
         description = entity.getDescription();
         type = entity.getType();
-        cashClosingId = entity.getCashClosing().getId();
+        cashSessionId = entity.getCashSession().getId();
     }
 
     public Long getId() {
@@ -75,11 +75,11 @@ public class CashMovementDTO {
         this.type = type;
     }
 
-    public Long getCashClosingId() {
-        return cashClosingId;
+    public Long getCashSessionId() {
+        return cashSessionId;
     }
 
-    public void setCashClosingId(Long cashClosingId) {
-        this.cashClosingId = cashClosingId;
+    public void setCashSessionId(Long cashSessionId) {
+        this.cashSessionId = cashSessionId;
     }
 }
